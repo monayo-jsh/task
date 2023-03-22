@@ -1,0 +1,39 @@
+logging:
+  level:
+    root: info
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  jpa:
+    database: h2
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:h2:mem:task
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+external:
+  kakao:
+    api-key: ${KAKAO_API_KEY}
+    host: https://dapi.kakao.com
+    connection-timeout: 3
+    read-timeout: 3
+    end-point:
+      search-blog: /v2/search/blog
+  naver:
+    client-id: ${NAVER_CLIENT_ID}
+    client-secret: ${NAVER_CLIENT_SECRET}
+    connection-timeout: 3
+    read-timeout: 3
+    host: https://openapi.naver.com
+    end-point:
+      search-blog: /v1/search/blog.json

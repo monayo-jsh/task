@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.1.4/pagination.css"/>
+  <link rel="stylesheet" href="/stylesheet/common.css"/>
+  <link rel="stylesheet" href="/stylesheet/blog.css"/>
+  <script type="text/javascript" src="/javascript/jquery/jquery-3.6.4.min.js"></script>
+  <script type="text/javascript" src="/javascript/jquery/jquery.twbsPagination.js"></script>
+  <script type="text/javascript" src="/javascript/common/common.js"></script>
+  <script type="text/javascript" src="/javascript/common/ajax.js"></script>
+  <script type="text/javascript">
+
+    window.page = 1;
+    window.pageSize = 10;
+
+    function btnSearch() {
+      window.page = 1;
+      getData();
+    }
+
+    function getData() {
+      let $keyword = $("#keyword");
+      if($keyword.val() === "") {
+        alert("키워드를 입력해주세요.");
+        $keyword.focus();
+        return;
+      }
+
+      let data = {
+        'keyword': $keyword.val(),
+        'page': window.page,
+        'size': window.pageSize
+      }
+
+      let selectedSortValue = $("#sort").val();
+      if (selectedSortValue !== '') {
+        data.sort = selectedSortValue;
+      }
+
+      requestAjax(HTTP_METHOD.GET, "blog/search", {callback: blogCallBack}, data);
+    }
+
+    function blogCallBack(res) {
+      const result = res.result;
+
+      let tbodyHtml = makeTbodyHtml(result.blogs);
+      $("#blogs").html(tbodyHtml);
+
+      let totalPages = Math.min((result.total_count / window.pageSize), 50);
+      if (totalPages === 0) totalPages = 1;
+
+      let $pagination = $('#pagination');
+      $pagination.twbsPagination({
+          totalPages: totalPages,
+          startPage: 1,
+          visiblePages: window.pageSize,
+          prev: "‹",
+          next: "›",
+          first: '«',
+          last: '»',
+          initiateStartPageClick: false,
+          onPageClick: function(event, page) {
+            window.page = page;
+            getData();
+          }
+        });
+    }
+
+    function makeTbodyHtml(blogs) {
+      if(blogs.length === 0) {
+        return `
+          <tr>
+            <td colspan="7" style="text-align: center">조회된 결과가 없습니다.</td>
+          </tr>
+        `;
+      }
+
+      let tbodyHtml = '';
+      let no = (window.page * window.pageSize) - (window.pageSize - 1)
+      for(const blog of blogs) {
+        let createdDate = new Date(blog.created_date).yyyyMMddHHmmss();
+        let thumbnail = blog.thumbnail ? `<img src="${blog.thumbnail}" />` : '';
+
+        tbodyHtml += `
+            <tr>
+              <td>${no++}</td>
+              <td>${blog.blog_name}</td>
+              <td>${blog.title}</td>
+              <td>${blog.summary_contents}</td>
+              <td>${blog.blog_url}</td>
+              <td>${thumbnail}</td>
+              <td>${createdDate}</td>
+            </tr>
+          `;
+      }
+
+      return tbodyHtml;
+    }
+  </script>
+  <title>블로그 검색</title>
+</head>
+<body>
+<h3># 블로그 검색</h3>
+<br/>
+<div class="search">
+  <ul>
+    <li>
+      <label>키워드<span style="color:red">*</span></label>
+      <input type="text" id="keyword" name="keyword" value="" maxlength="100" placeholder="키워드를 입력해주세요."/>
+    </li>
+    <li>
+      <label>Sorting</label>
+      <select id="sort" name="sort">
+        <option value="accuracy">정확도순</option>
+        <option value="recency">최신순</option>
+        <option value="">선택안함</option>
+      </select>
+    </li>
+    <li>
+      <input type="button" value="검색" onclick="btnSearch(); return false;" />
+    </li>
+
+  </ul>
+</div>
+<div class="content">
+  <table class="table" style="width: 1980px">
+    <thead>
+    <tr>
+      <th style="width: 1%">NO</th>
+      <th style="width: 9%">블로그 이름</th>
+      <th style="width: 20%">글 제목</th>
+      <th style="width: 40%">글 요약</th>
+      <th style="width: 10%">글 URL</th>
+      <th style="width: 10%">썸네일</th>
+      <th style="width: 10%">글 작성시간</th>
+    </tr>
+    </thead>
+    <tbody id="blogs">
+      <tr>
+        <td colspan="7" style="text-align: center">조회된 결과가 없습니다.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="pagination" class="content-pagination"></div>
+</div>
+</body>
+</html>

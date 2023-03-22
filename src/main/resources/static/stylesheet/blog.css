@@ -1,0 +1,46 @@
+.search {
+  width: 720px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search ul li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.search li label {
+  width: 19%;
+}
+
+.search li select {
+  width: 80%;
+  padding: 5px;
+}
+
+.search li input {
+  width: 80%;
+  padding: 5px;
+}
+
+.search li input[type=button] {
+  width: 100%;
+}
+
+.content {
+  padding: 10px;
+}
+
+.content-pagination {
+  display: flex;
+  justify-content: center;
+}
