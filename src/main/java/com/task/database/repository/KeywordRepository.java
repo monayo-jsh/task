@@ -12,6 +12,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, String> {
 
     @Modifying
     @Query("UPDATE Keyword Set searchCount = searchCount + 1 where word = :word")
-    int increaseSearchCountByKeyword(@Param("word") String word);
+    void increaseSearchCountByKeyword(@Param("word") String word);
 
 }

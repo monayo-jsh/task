@@ -2,8 +2,8 @@ package com.task.domain.blog;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.task.external.kakao.domain.searchBlog.DocumentDTO;
-import com.task.external.naver.domain.searchBlog.ItemDTO;
+import com.task.external.blog.kakao.domain.searchBlog.DocumentDTO;
+import com.task.external.blog.naver.domain.searchBlog.ItemDTO;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package com.task.domain.blog.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.task.domain.blog.SearchBlogResVo;
-import com.task.external.domain.blog.SearchBlogResponse;
+import com.task.external.blog.domain.SearchBlogResponse;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;

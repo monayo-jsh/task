@@ -9,8 +9,8 @@ import static org.mockito.Mockito.verify;
 
 import com.task.domain.blog.SearchBlogReqVo;
 import com.task.domain.blog.result.SearchBlogGetVo;
-import com.task.external.domain.blog.SearchBlogResponse;
-import com.task.external.service.BlogSearchService;
+import com.task.external.blog.domain.SearchBlogResponse;
+import com.task.external.blog.service.BlogSearchService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

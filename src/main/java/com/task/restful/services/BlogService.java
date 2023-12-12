@@ -2,9 +2,10 @@ package com.task.restful.services;
 
 import com.task.domain.blog.SearchBlogReqVo;
 import com.task.domain.blog.result.SearchBlogGetVo;
-import com.task.external.domain.blog.SearchBlogRequest;
-import com.task.external.domain.blog.SearchBlogResponse;
-import com.task.external.service.BlogSearchService;
+import com.task.external.blog.SearchBlogApi;
+import com.task.external.blog.SearchBlogApiCaller;
+import com.task.external.blog.domain.SearchBlogRequest;
+import com.task.external.blog.domain.SearchBlogResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class BlogService {
 
-    private final BlogSearchService blogSearchService;
+    private final SearchBlogApi searchBlogApi;
     private final KeywordService keywordService;
 
-    public BlogService(BlogSearchService blogSearchService, KeywordService keywordService) {
-        this.blogSearchService = blogSearchService;
+    public BlogService(SearchBlogApiCaller searchBlogApiCaller, KeywordService keywordService) {
+        this.searchBlogApi = searchBlogApiCaller.getSearchBlogApi();
         this.keywordService = keywordService;
     }
 
-    public SearchBlogGetVo getBlogs(SearchBlogReqVo reqVo) throws Exception {
-        SearchBlogResponse searchBlogResponse = blogSearchService.blogSearch(SearchBlogRequest.builder()
-                                                                                              .query(reqVo.getKeyword())
-                                                                                              .sort(reqVo.getSort())
-                                                                                              .page(reqVo.getPage())
-                                                                                              .size(reqVo.getSize())
-                                                                                              .build());
+    public SearchBlogGetVo getBlogs(SearchBlogReqVo reqVo) {
+        SearchBlogResponse searchBlogResponse = searchBlogApi.search(SearchBlogRequest.builder()
+                                                                                      .query(reqVo.getKeyword())
+                                                                                      .sort(reqVo.getSort())
+                                                                                      .page(reqVo.getPage())
+                                                                                      .size(reqVo.getSize())
+                                                                                      .build());
 
         if (reqVo.getPage() == 1) {
             try {
